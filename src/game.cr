@@ -3,12 +3,6 @@ enum Teams
   Mad
 end
 
-def print_card(curr_card)
-  curr_card.each do |card|
-    puts card
-  end
-end
-
 alias Card = Tuple(String, String)
 
 class Game
@@ -115,6 +109,10 @@ class Base_Player
 
   def send_message(msg : String)
     @last_message = msg
+  end
+
+  def name
+    @name
   end
 
   def team
