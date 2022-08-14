@@ -7,7 +7,7 @@ enum MessageTypes
 end
 
 def create_message(message_type : String, message_payload)
-  return { "type" => message_type, "payload" => message_payload }.to_json
+  return {"type" => message_type, "payload" => message_payload}.to_json
 end
 
 class Web_Player < Base_Player
@@ -18,7 +18,7 @@ class Web_Player < Base_Player
   def send_message(msg : String)
     super msg
     @socket.send(create_message(MessageTypes::Message.to_s, msg))
-  end 
+  end
 
   def socket
     @socket
@@ -29,7 +29,7 @@ web_players = [] of Web_Player
 
 ws_handler = HTTP::WebSocketHandler.new do |socket|
   puts "New player detected"
-  new_player = Web_Player.new("Player #{web_players.size}", Teams::Glad, socket) 
+  new_player = Web_Player.new("Player #{web_players.size}", Teams::Glad, socket)
   web_players << new_player
 
   web_players.each do |web_player|

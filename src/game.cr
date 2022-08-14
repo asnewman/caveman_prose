@@ -77,7 +77,7 @@ class Game
   def next_round
     switch_team
     @round_start_time = Time.utc
-    
+
     if @curr_team == Teams::Glad
       @curr_glad_player = (@curr_glad_player + 1) % @players_by_team[Teams::Glad].size
     else
@@ -111,7 +111,6 @@ class Game
     @scores
   end
 end
-
 
 class Base_Player
   def initialize(@name : String, @team : Teams)

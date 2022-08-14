@@ -2,11 +2,11 @@ require "spec"
 require "../src/game"
 
 dummy_players = [
-    Base_Player.new("Alpha", Teams::Glad),
-    Base_Player.new("Bravo", Teams::Glad),
-    Base_Player.new("Charlie", Teams::Glad),
-    Base_Player.new("Delta", Teams::Mad),
-    Base_Player.new("Echo", Teams::Mad),
+  Base_Player.new("Alpha", Teams::Glad),
+  Base_Player.new("Bravo", Teams::Glad),
+  Base_Player.new("Charlie", Teams::Glad),
+  Base_Player.new("Delta", Teams::Mad),
+  Base_Player.new("Echo", Teams::Mad),
 ]
 
 describe "Game" do
