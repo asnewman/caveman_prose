@@ -25,6 +25,7 @@ class Game
       end
       @players_by_team[player.team] << player
     end
+    message_all_players "Game started"
   end
 
   def draw_new_card
@@ -84,6 +85,16 @@ class Game
     end
   end
 
+  private def message_all_players(msg : String)
+    @players_by_team[Teams::Glad].each do |p|
+      p.send_message msg
+    end
+
+    @players_by_team[Teams::Mad].each do |p|
+      p.send_message msg
+    end
+  end
+
   def drawn_cards
     @drawn_cards
   end
@@ -104,11 +115,11 @@ end
 
 class Base_Player
   def initialize(@name : String, @team : Teams)
-    @last_message = ""
+    @messages = [] of String
   end
 
   def send_message(msg : String)
-    @last_message = msg
+    @messages << msg
   end
 
   def name
@@ -119,7 +130,7 @@ class Base_Player
     @team
   end
 
-  def last_message
-    @last_message
+  def messages
+    @messages
   end
 end

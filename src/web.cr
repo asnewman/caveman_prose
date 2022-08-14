@@ -17,7 +17,7 @@ class Web_Player < Base_Player
 
   def send_message(msg : String)
     super msg
-    @socket.send(msg)
+    @socket.send(create_message(MessageTypes::Message.to_s, msg))
   end 
 
   def socket

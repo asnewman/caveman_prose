@@ -1,7 +1,7 @@
 require "spec"
 require "../src/game"
 
-dummyPlayers = [
+dummy_players = [
     Base_Player.new("Alpha", Teams::Glad),
     Base_Player.new("Bravo", Teams::Glad),
     Base_Player.new("Charlie", Teams::Glad),
@@ -11,28 +11,28 @@ dummyPlayers = [
 
 describe "Game" do
   it "draws card properly" do
-    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummyPlayers
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummy_players
     game.draw_new_card
     game.drawn_cards.size.should eq(1)
     game.deck.size.should eq(1)
-    dummyPlayers[0].last_message.should_not eq("")
+    dummy_players[0].messages[1].should_not eq("")
   end
 
   it "doesn't draws card if round has ended" do
-    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 1, dummyPlayers
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 1, dummy_players
     game.draw_new_card
     sleep 2.seconds
     game.draw_new_card.should eq(nil)
   end
 
   it "starts round correctly" do
-    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummyPlayers
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummy_players
     game.next_round
     game.curr_team.should eq(Teams::Mad)
   end
 
   it "adds and minuses correctly" do
-    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummyPlayers
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummy_players
 
     game.add_three
     game.add_one
@@ -46,15 +46,22 @@ describe "Game" do
   end
 
   it "switches between players correctly" do
-    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummyPlayers
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummy_players
     game.next_round
     game.next_round
     game.draw_new_card
-    dummyPlayers[1].last_message.should_not eq("")
+    dummy_players[1].messages[1].should_not eq("")
     game.next_round
     game.next_round
     game.next_round
     game.draw_new_card
-    dummyPlayers[3].last_message.should_not eq("")
+    dummy_players[3].messages[1].should_not eq("")
+  end
+
+  it "messages game start to all players" do
+    game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 60, dummy_players
+    dummy_players.each do |player|
+      player.messages[0].should eq("Game started")
+    end
   end
 end
