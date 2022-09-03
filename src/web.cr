@@ -4,6 +4,9 @@ require "./game.cr"
 
 enum MessageTypes
   Message
+  Draw
+  NewRound
+  Start
 end
 
 def create_message(message_type : String, message_payload)
@@ -27,9 +30,15 @@ end
 
 web_players = [] of Web_Player
 
+game: Game | Nil = nil
+
 ws_handler = HTTP::WebSocketHandler.new do |socket|
   puts "New player detected"
-  new_player = Web_Player.new("Player #{web_players.size}", Teams::Glad, socket)
+  if web_players.size % 2 == 0
+    new_player = Web_Player.new("Player #{web_players.size}", Teams::Glad, socket)
+  else
+    new_player = Web_Player.new("Player #{web_players.size}", Teams::Mad, socket)
+  end
   web_players << new_player
 
   web_players.each do |web_player|
@@ -38,6 +47,17 @@ ws_handler = HTTP::WebSocketHandler.new do |socket|
 
   socket.on_close do
     web_players.delete(new_player)
+  end
+
+  socket.on_message do |message|
+    puts "Received message: #{message}"
+
+    if message == MessageTypes::Start.to_s && web_players.size >= 2
+      puts "Message received to start game"
+      game = Game.new([{"hand", "handcuff"}, {"dog", "dog walk"}], 60, web_players)
+    elsif message == MessageTypes::Draw.to_s && game
+      game.draw_new_card
+    end
   end
 end
 
