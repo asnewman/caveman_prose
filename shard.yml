@@ -1,0 +1,5 @@
+name: caveman_prose
+version: 0.1.0
+dependencies:
+  schedule:
+    github: hugoabonizio/schedule.cr

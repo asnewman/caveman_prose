@@ -5,7 +5,7 @@ require "./game.cr"
 enum MessageTypes
   Message
   Draw
-  NewRound
+  Next_Round
   Start
 end
 
@@ -55,8 +55,16 @@ ws_handler = HTTP::WebSocketHandler.new do |socket|
     if message == MessageTypes::Start.to_s && web_players.size >= 2
       puts "Message received to start game"
       game = Game.new([{"hand", "handcuff"}, {"dog", "dog walk"}], 60, web_players)
-    elsif message == MessageTypes::Draw.to_s && game
-      game.draw_new_card
+    end
+
+    if game.nil?
+      next
+    end
+
+    if message == MessageTypes::Draw.to_s
+      game.not_nil!.draw_new_card
+    elsif message == MessageTypes::Next_Round.to_s
+      game.not_nil!.next_round
     end
   end
 end

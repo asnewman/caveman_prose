@@ -1,13 +1,17 @@
 require "spec"
 require "../src/game"
 
-dummy_players = [
-  Base_Player.new("Alpha", Teams::Glad),
-  Base_Player.new("Bravo", Teams::Glad),
-  Base_Player.new("Charlie", Teams::Glad),
-  Base_Player.new("Delta", Teams::Mad),
-  Base_Player.new("Echo", Teams::Mad),
-]
+dummy_players = [] of Base_Player
+
+Spec.before_each do
+  dummy_players = [
+    Base_Player.new("Alpha", Teams::Glad),
+    Base_Player.new("Bravo", Teams::Glad),
+    Base_Player.new("Charlie", Teams::Glad),
+    Base_Player.new("Delta", Teams::Mad),
+    Base_Player.new("Echo", Teams::Mad),
+  ]
+end
 
 describe "Game" do
   it "draws card properly" do
@@ -21,7 +25,7 @@ describe "Game" do
   it "doesn't draws card if round has ended" do
     game = Game.new [{"hand", "handcuff"}, {"dog", "dog walk"}], 1, dummy_players
     game.draw_new_card
-    sleep 2.seconds
+    sleep 3.seconds
     game.draw_new_card.should eq(nil)
   end
 
@@ -50,12 +54,21 @@ describe "Game" do
     game.next_round
     game.next_round
     game.draw_new_card
-    dummy_players[1].messages[1].should_not eq("")
+    dummy_players[1].messages[0].should eq("Game started")
+    dummy_players[1].messages[1].should eq("Round start")
+    dummy_players[1].messages[2].should eq("Round start")
+    dummy_players[1].messages[3].should_not eq("")
     game.next_round
     game.next_round
     game.next_round
     game.draw_new_card
-    dummy_players[3].messages[1].should_not eq("")
+    dummy_players[3].messages[0].should eq("Game started")
+    dummy_players[3].messages[1].should eq("Round start")
+    dummy_players[3].messages[2].should eq("Round start")
+    dummy_players[3].messages[3].should eq("Round start")
+    dummy_players[3].messages[4].should eq("Round start")
+    dummy_players[3].messages[5].should eq("Round start")
+    dummy_players[3].messages[6].should_not eq("")
   end
 
   it "messages game start to all players" do

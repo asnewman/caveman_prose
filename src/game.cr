@@ -1,3 +1,5 @@
+require "schedule"
+
 enum Teams
   Glad
   Mad
@@ -26,6 +28,9 @@ class Game
       @players_by_team[player.team] << player
     end
     message_all_players "Game started"
+    Schedule.after(@round_length.seconds) do
+      message_all_players "Round over"
+    end
   end
 
   def draw_new_card
@@ -77,6 +82,10 @@ class Game
   def next_round
     switch_team
     @round_start_time = Time.utc
+    message_all_players "Round start"
+    Schedule.after(@round_length.seconds) do
+      message_all_players "Round over"
+    end
 
     if @curr_team == Teams::Glad
       @curr_glad_player = (@curr_glad_player + 1) % @players_by_team[Teams::Glad].size
